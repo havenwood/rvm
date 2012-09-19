@@ -5,32 +5,35 @@ class String
       "#{_start}#{self.to_s}#{_end}"
     end
   end
-  unless self.method_defined? :echo?
-    def echo?
-      !! @echo
-    end
-  end
-  unless self.method_defined? :echo!
-    def echo!
-      @echo = true
-    end
-  end
-  unless self.method_defined? :echo
-    def echo
-      _str = clone
-      _str.instance_variable_set :@echo, true
-      _str
-    end
-  end
 end
 
 class Rvm2::Environment
-  def self.shell
+  def self.shell &block
     # TODO: add more shells (fish?)
+    # TODO: abstract away PATH setting
     # TODO: detect shell via parent pid
     @shell ||= begin
       require 'rvm2/environment/shell'
       Rvm2::Environment::Shell.new
     end
+
+    if block_given?
+      Rvm2::Environment.new(@shell).run &block
+    else
+      @shell
+    end
+  end
+
+  # Handle blocks to Rvm2::Environment.shell
+  def initialize(shell)
+    @shell = shell
+  end
+  def run &block
+    @result = []
+    instance_eval &block
+    @result
+  end
+  def method_missing name, *options
+    @result.push @shell.send(name, *options)
   end
 end

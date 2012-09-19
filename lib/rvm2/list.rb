@@ -24,25 +24,25 @@ class Rvm2::List
   def self.pretty list=nil
     list = advenced(true)
     has_aliases = ! list.map(&:alias).reject(&:nil?).empty?
+
     list.unshift( OpenStruct.new( :name => "# Name", :path => "# Path" , :alias => "# Aliased to" ) )
+
     longest_name = list.map(&:name).map(&:length).max
     longest_path = list.map(&:path).map(&:length).max
-    if has_aliases
-      list.map{ |ruby|
-        "%-#{longest_name}s => %-#{longest_path}s %s" % [ ruby.name, ruby.path, ruby.alias ]
-      }.map(&:echo)
-    else
-      list.map{ |ruby|
-        "%-#{longest_name}s => %-#{longest_path}s" % [ ruby.name, ruby.path ]
-      }.map(&:echo)
-    end
+
+    format_string = "%-#{longest_name}s => %-#{longest_path}s"
+    format_string += " %s" if has_aliases
+
+    Rvm2::Environment.shell.echo( list.map{ |ruby|
+      format_string % [ ruby.name, ruby.path, ruby.alias ]
+    } )
   end
 
   def self.current
-    [
+    Rvm2::Environment.shell.echo [
       "ruby: #{ENV['MY_RUBY_HOME'] || 'system'}",
       "gems: #{ENV['GEM_PATH'] || 'not in effect'}",
-    ].map(&:echo!)
+    ]
   end
 
   def self.clean_path _path, _gem_home, _gem_path, _old_ruby
@@ -72,19 +72,19 @@ class Rvm2::List
   def self.use name, *options
     _new_ruby, _new_gem_home, _new_gem_path = self.detect_ruby name, *options
     return ([
-      "#{name} is not installed.".echo,
+      Rvm2::Environment.shell.echo("#{name} is not installed."),
       Rvm2::Environment.shell.status(1),
     ]) if _new_ruby.nil?
-    _path = ENV['PATH'].split(/:/)
+    _path = Rvm2::Environment.shell.PATH
     _gem_path = ENV['GEM_PATH'].split(/:/)
     _path = self.clean_path _path, ENV['GEM_HOME'], _gem_path, ENV['MY_RUBY_HOME']
     _path = [ _new_gem_path, _new_ruby ].flatten.map{|p| File.join(p,'bin') } + _path
-    return [
-      "Using #{_new_ruby}".echo,
-      Rvm2::Environment.shell.export_variable( 'PATH', _path.join(":") ),
-      Rvm2::Environment.shell.export_variable( 'GEM_HOME', _new_gem_home ),
-      Rvm2::Environment.shell.export_variable( 'GEM_PATH', _new_gem_path.join(":") ),
-      Rvm2::Environment.shell.export_variable( 'MY_RUBY_HOME', _new_ruby ),
-    ]
+    return Rvm2::Environment.shell do
+      echo "Using #{_new_ruby}"
+      PATH( _path )
+      export_variable( 'GEM_HOME', _new_gem_home )
+      export_variable( 'GEM_PATH', _new_gem_path.join(":") )
+      export_variable( 'MY_RUBY_HOME', _new_ruby )
+    end
   end
 end

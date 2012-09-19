@@ -8,8 +8,10 @@ rvm2()
     EOF
   end
 
-  def echo message
-    "echo #{message}"
+  def echo *messages
+    [ messages ].flatten.map{ |message|
+      "echo #{message.quoted}"
+    }
   end
 
   def eport_array name, value
@@ -32,6 +34,14 @@ rvm2()
       export_integer name, value
     else
       export_string name, value
+    end
+  end
+
+  def PATH path=nil
+    if path.nil?
+      ENV['PATH'].split(/:/)
+    else
+      export_variable 'PATH', path.join(':')
     end
   end
 

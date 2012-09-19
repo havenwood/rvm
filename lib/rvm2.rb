@@ -14,12 +14,16 @@ class Rvm2
     self.argv = argv
   end
 
-  def self.settings
-    @@settings ||= Rvm2::Settings.new
-  end
-
   def self.running
     Thread.current[:rvm2]
+  end
+
+  def settings
+    @settings ||= Rvm2::Settings.new
+  end
+
+  def self.settings
+    running.settings
   end
 
   def run
@@ -54,28 +58,21 @@ class Rvm2
   def run_command
     case self.action
     when 'show_function'
-      shell_echo Rvm2::Environment.shell.shell_function
+      puts Rvm2::Environment.shell.shell_function
     when 'reload'
-      shell_echo Rvm2::Environment.shell.shell_function
-      shell_echo 'RVM reloaded' if verbose
+      puts Rvm2::Environment.shell.shell_function
+      puts 'RVM reloaded' if verbose
     when 'list'
-      shell_echo Rvm2::List.pretty
+      puts Rvm2::List.pretty
     when 'current'
-      shell_echo Rvm2::List.current
+      puts Rvm2::List.current
     when 'use'
-      shell_echo Rvm2::List.use(*argv)
+      puts Rvm2::List.use(*argv)
     else
       $stderr.puts "Unknown action: #{self.action}"
-      shell_echo Rvm2::Environment.shell.status 1
+      puts Rvm2::Environment.shell.status 1
       # TODO: show some help
     end
-  end
-
-  def shell_echo messages
-    [ messages ].flatten.each{ |message|
-      message = Rvm2::Environment.shell.echo( message.to_s.quoted ) if shell && message.echo?
-      puts message
-    }
   end
 
   def log_debug message

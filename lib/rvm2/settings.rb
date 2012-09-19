@@ -12,7 +12,6 @@ class Rvm2::Settings < OpenStruct
       File.join( ENV['HOME'], ".rvm/rubies"),
       File.join( self.rvm_path, "rubies" ),
       "/usr/local/rvm/rubies",
-
     ].each {|dir|
       if Dir.exist?(dir) and not self.rubies_paths.include?( dir )
         self.rubies_paths.push( dir )
