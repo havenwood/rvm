@@ -12,9 +12,9 @@ In some kind of shell initialization file add:
 
 it's all like rvm:
 
-    rvm list
-    rvm current
-    rvm use 1.9.3
+    rvm2 list
+    rvm2 current
+    rvm2 use 1.9.3
 
 Currently first 'random' ruby is used that matches pattern,
 use full name to be sure proper ruby is used.
