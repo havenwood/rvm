@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+rvm_lib_path = File.expand_path( "../../lib", __FILE__ )
+$:.include?(rvm_lib_path) || $:.unshift(rvm_lib_path)
+
+require 'rvm2'
+Rvm2.new( ARGF, ARGV ).run
