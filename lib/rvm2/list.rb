@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class Rvm2::List
   def self.paths aliases=false
     _list = Rvm2.settings.rubies_paths.map{ |dir|

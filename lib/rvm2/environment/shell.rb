@@ -3,7 +3,7 @@ class Rvm2::Environment::Shell
     return <<-EOF
 rvm2()
 {
-  source <( "#{Rvm2.settings.ruby_path}/bin/ruby" "#{Rvm2.settings.rvm_path}/bin/rvm2" --shell "$@" ) || return $?
+  source <( "#{Rvm2.settings.ruby_path}/bin/ruby" "#{Rvm2.settings.rvm_path}/bin/rvm2" "$@" ) || return $?
 }
     EOF
   end
