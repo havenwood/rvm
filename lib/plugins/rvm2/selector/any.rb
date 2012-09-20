@@ -1,4 +1,7 @@
+require 'rvm2/list'
+
 class Rvm2::Selector; end
+
 class Rvm2::Selector::Any
   attr_reader :name, :options
 
