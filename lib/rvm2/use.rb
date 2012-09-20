@@ -32,11 +32,9 @@ private
   end
 
   def detect_ruby
-    name, plugin, matched_args = Rvm2::Plugins.instance.first_plugin( :selector, :name?, Rvm2::Settings.instance.selector || "any" )
+    plugin_name, plugin, matched_args = Rvm2::Plugins.instance.first_plugin( :selector, :name?, Rvm2::Settings.instance.selector || "any" )
     if plugin
-      log_debug "Selector: #{command*" "}"
       plugin.new(name, *options).detect_ruby
-      return 0
     else
       raise "Missing selector for: #{Rvm2::Settings.instance.selector}"
     end
