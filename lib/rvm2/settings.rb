@@ -13,7 +13,7 @@ class Rvm2::Settings < OpenStruct
   def setup
     # TODO: improve autodetection
     self.ruby_path    ||= File.join( ENV['HOME'], ".rvm/rubies/ruby-1.9.3-p194" )
-    self.rvm_path     ||= "/home/mpapis/projects/rvm/rvm2" #File.join( ENV['HOME'], ".rvm2" )
+    self.rvm_path     ||= File.join( ENV['HOME'], "projects/rvm/rvm2" ) #File.join( ENV['HOME'], ".rvm2" )
     self.rubies_paths ||= []
     [
       File.join( ENV['HOME'], ".rvm/rubies"),

@@ -1,13 +1,20 @@
 require 'rvm2/list'
 
 class Rvm2::Selector; end
-
 class Rvm2::Selector::Any
-  attr_reader :name, :options
-
-  def self.name? name
-    name == 'any'
+  def self.name? _name
+    _name == name
   end
+
+  def self.name
+    'any'
+  end
+
+  def self.description
+    'Select first matching ruby, random order.'
+  end
+
+  attr_reader :name, :options
 
   def initialize name, *options
     @name = name

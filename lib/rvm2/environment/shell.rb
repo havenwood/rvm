@@ -1,6 +1,6 @@
 class Rvm2::Environment::Shell
   def shell_function
-    return <<-EOF
+    puts <<-EOF
 rvm2()
 {
   source <( "#{Rvm2::Settings.instance.ruby_path}/bin/ruby" "#{Rvm2::Settings.instance.rvm_path}/bin/rvm2" "$@" ) || return $?
