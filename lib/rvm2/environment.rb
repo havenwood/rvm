@@ -18,22 +18,14 @@ class Rvm2::Environment
     end
 
     if block_given?
-      Rvm2::Environment.new(@shell).run &block
+      instance_eval &block
     else
       @shell
     end
   end
 
   # Handle blocks to Rvm2::Environment.shell
-  def initialize(shell)
-    @shell = shell
-  end
-  def run &block
-    @result = []
-    instance_eval &block
-    @result
-  end
-  def method_missing name, *options
-    @result.push @shell.send(name, *options)
+  def self.method_missing name, *options
+    @shell.send(name, *options)
   end
 end

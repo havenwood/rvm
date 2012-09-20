@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 
-rvm_lib_path = File.expand_path( "../../lib", __FILE__ )
-$:.include?(rvm_lib_path) || $:.unshift(rvm_lib_path)
+RVM2_LIB_PATH = File.expand_path( "../../lib", __FILE__ )
+$:.include?(RVM2_LIB_PATH) || $:.unshift(RVM2_LIB_PATH)
 
-require 'rvm2'
-Rvm2.new( ARGF, ARGV ).run
+# TODO: overwrite Gem.home / Gem.path
+
+require 'rvm2/cli'
+
+Rvm2::Cli.new( ARGF, ARGV ).run

@@ -1,9 +1,16 @@
 require 'ostruct'
+require 'singleton'
 
 class Rvm2::Settings < OpenStruct
+  include Singleton
+
   def initialize(hash = {})
     super(hash)
+    setup
     # TODO: read settings from ~/.rvm2.yaml
+  end
+
+  def setup
     # TODO: improve autodetection
     self.ruby_path    ||= File.join( ENV['HOME'], ".rvm/rubies/ruby-1.9.3-p194" )
     self.rvm_path     ||= "/home/mpapis/projects/rvm/rvm2" #File.join( ENV['HOME'], ".rvm2" )

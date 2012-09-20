@@ -3,27 +3,27 @@ class Rvm2::Environment::Shell
     return <<-EOF
 rvm2()
 {
-  source <( "#{Rvm2.settings.ruby_path}/bin/ruby" "#{Rvm2.settings.rvm_path}/bin/rvm2" "$@" ) || return $?
+  source <( "#{Rvm2::Settings.instance.ruby_path}/bin/ruby" "#{Rvm2::Settings.instance.rvm_path}/bin/rvm2" "$@" ) || return $?
 }
     EOF
   end
 
   def echo *messages
-    [ messages ].flatten.map{ |message|
+    puts [ messages ].flatten.map(&:strip).map{ |message|
       "echo #{message.quoted}"
     }
   end
 
   def eport_array name, value
-    "export -a #{name}; #{name}=( #{value.map(&:quoted).join(' ')} )"
+    puts "export -a #{name}; #{name}=( #{value.map(&:quoted).join(' ')} )"
   end
 
   def export_integer name, value
-    "export #{name}; #{name}=#{value}"
+    puts "export #{name}; #{name}=#{value}"
   end
 
   def export_string name, value
-    "export #{name}; #{name}=#{value.quoted}"
+    puts "export #{name}; #{name}=#{value.quoted}"
   end
 
   def export_variable name, value
@@ -46,6 +46,6 @@ rvm2()
   end
 
   def status value=0
-    "return #{value}"
+    puts "return #{value}"
   end
 end
