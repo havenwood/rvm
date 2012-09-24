@@ -17,13 +17,10 @@ class Rvm2::Cli
   end
 
   def run
+    # TODO: parse more flags!?
     detect_flag :debug
     detect_flag :verbose
-    # TODO: parse more flags!?
-    run_command
-  end
 
-  def run_command
     if parameters.argv.empty?
       $stderr.puts "No action given!"
       show_help
