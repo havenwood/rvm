@@ -1,4 +1,9 @@
 class Rvm2::Environment::Shell
+  def self.supported_shell name
+    name = name.to_s
+    %w( sh bash zsh dash ).detect{|_name| _name == name }
+  end
+
   def shell_function
     puts <<-EOF
 rvm2()

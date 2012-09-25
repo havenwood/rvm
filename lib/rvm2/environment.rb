@@ -12,10 +12,9 @@ class Rvm2::Environment
     # TODO: add more shells (fish?)
     # TODO: abstract away PATH setting
     # TODO: detect shell via parent pid
-    @shell ||= begin
-      require 'rvm2/environment/shell'
-      Rvm2::Environment::Shell.new
-    end
+    name, shell, hit = Rvm2::Plugins.instance.first_plugin :environment, :supported_shell, :bash
+
+    @shell = shell.new
 
     if block_given?
       instance_eval &block
